@@ -114,6 +114,7 @@ int main() {
     system_message_ordering_test();
     copy_constructor_test();
     rule_of_five_test();
+    growth_behavior_test();
     return 0;
 }
 
