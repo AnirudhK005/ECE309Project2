@@ -1,6 +1,7 @@
 
 #include <cstddef>
 #include "core/message.h"
+#pragma once
 
 class Conversation {
 public:

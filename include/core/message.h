@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#pragma once
 
 enum class Role { System, User, Assistant };
 
@@ -15,8 +16,13 @@ public:
         content_ = content;
     }
 
-    Role               role()    const noexcept;
-    const std::string& content() const noexcept;
+    Role role() const noexcept{
+        return this->role_;
+    }
+
+    const std::string& content() const noexcept {
+        return this->content_;
+    }
 
 private:
     Role        role_;

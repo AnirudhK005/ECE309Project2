@@ -1,5 +1,6 @@
 #include <string>
 #include <string_view>
+#pragma once
 
 class SentinelScanner {
 public:
