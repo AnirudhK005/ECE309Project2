@@ -55,5 +55,43 @@ Conversation& Conversation::operator=(Conversation&& object) noexcept{
 }
 
 void Conversation::append(Message m){
-    
+    if(size_ < capacity_){
+        data_[size_] = m;
+        size_++;
+    } else {
+        if(capacity_ == 0){
+            capacity_ = 1;
+        } else {
+            capacity_ = capacity_ * 2;
+        }
+        Message* newArray = new Message[capacity_];
+        for(int i = 0; i < size_; i++){
+            newArray[i] = data_[i];
+        }
+        delete[] data_;
+        data_ = newArray;
+        data_[size_] = m;
+        size_++;
+    }
 }
+
+std::size_t Conversation::size() const noexcept {
+    return size_;
+}
+
+const Message& Conversation::at(std::size_t i) const{
+    if(i >= size()){
+        throw std::out_of_range("Out of range");
+    } else {
+        return data_[i];
+    }
+}
+
+const Message* Conversation::begin() const noexcept{
+    return data_;
+}
+
+const Message* Conversation::end() const noexcept{
+    return data_ + size_;
+}
+
