@@ -42,3 +42,11 @@ SentinelScanner::Out SentinelScanner::feed(std::string_view chunk){
     }
     return output;
 }
+
+SentinelScanner::Out SentinelScanner::flush(){
+    Out output;
+    output.safe_text = pending_;
+    output.sentinel_found = false;
+    pending_ = "";
+    return output;
+}
