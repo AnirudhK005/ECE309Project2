@@ -11,9 +11,9 @@ Conversation::~Conversation(){
 }
 
 Conversation::Conversation(const Conversation& object){
-    data_ = new Message[object.size_];
     size_ = object.size_;
     capacity_ = object.capacity_;
+    data_ = new Message[object.capacity_];
     for(std::size_t i = 0; i < size_; i++){
         data_[i] = object.data_[i];
     }
@@ -24,7 +24,7 @@ Conversation& Conversation::operator=(const Conversation& object){
         delete[] data_;
         size_ = object.size_;
         capacity_ = object.capacity_;
-        data_ = new Message[size_];
+        data_ = new Message[object.capacity_];
         for(std::size_t i = 0; i < size_; i++){
             data_[i] = object.data_[i];
         }
