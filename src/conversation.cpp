@@ -14,7 +14,7 @@ Conversation::Conversation(const Conversation& object){
     data_ = new Message[object.size_];
     size_ = object.size_;
     capacity_ = object.capacity_;
-    for(int i = 0; i < size_; i++){
+    for(std::size_t i = 0; i < size_; i++){
         data_[i] = object.data_[i];
     }
 }
@@ -25,7 +25,7 @@ Conversation& Conversation::operator=(const Conversation& object){
         size_ = object.size_;
         capacity_ = object.capacity_;
         data_ = new Message[size_];
-        for(int i = 0; i < size_; i++){
+        for(std::size_t i = 0; i < size_; i++){
             data_[i] = object.data_[i];
         }
     }
@@ -65,7 +65,7 @@ void Conversation::append(Message m){
             capacity_ = capacity_ * 2;
         }
         Message* newArray = new Message[capacity_];
-        for(int i = 0; i < size_; i++){
+        for(std::size_t i = 0; i < size_; i++){
             newArray[i] = data_[i];
         }
         delete[] data_;
