@@ -193,6 +193,23 @@ void scanner_false_alarm_test(){
     assert(output2.sentinel_found == false);
 }
 
+void scanner_bounded_memory_test(){
+    const std::string sentinel = "<|end_conversation|>";
+    SentinelScanner scanner(sentinel);
+    const std::string testString = "<|end_conv";
+    int i = 0;
+    while(i < 4){
+        for(std::size_t i = 0; i < testString.size(); i++){
+            char x = testString[i];
+            SentinelScanner::Out output = scanner.feed(std::string(1, x));
+            assert(output.sentinel_found == false);
+            i++;
+        }
+    }
+}
+
+
+
 int main() {
     // TODO: write your tests here.
     empty_conversation_bounds_test();
@@ -202,6 +219,8 @@ int main() {
     growth_behavior_test();
     scanner_clean_test();
     scanner_split_boundary_test();
+    scanner_false_alarm_test();
+    scanner_bounded_memory_test();
     return 0;
 }
 
