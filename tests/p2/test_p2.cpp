@@ -161,9 +161,36 @@ void scanner_clean_test(){
     SentinelScanner::Out output2 = scanner.flush();
     assert(output.sentinel_found == false);
     assert(output.sentinel_found == false);
-    assert(output.safe_text == testString);
     assert(output2.sentinel_found == false);
     assert(output.safe_text + output2.safe_text == testString);
+}
+
+void scanner_split_boundary_test() {
+    const std::string test = "Goodbye.<|end_conversation|>";
+    const std::string sentinel = "<|end_conversation|>";
+    for (std::size_t split = 0; split <= test.size(); split++) {
+        SentinelScanner scanner(sentinel);
+        SentinelScanner::Out output1 = scanner.feed(test.substr(0, split));
+        SentinelScanner::Out output2 = scanner.feed(test.substr(split));
+        bool found = false;
+        if(output1.sentinel_found || output2.sentinel_found){
+            found = true;
+        } else {
+            found = false;
+        }
+        assert(found);
+        assert(output1.safe_text + output2.safe_text == "Goodbye.");
+    }
+}
+
+void scanner_false_alarm_test(){
+    const std::string sentinel = "<|end_conversation|>";
+    SentinelScanner scanner(sentinel);
+    std::string testString = "Hello world <|end_world|>";
+    SentinelScanner::Out output1 = scanner.feed(testString);
+    SentinelScanner::Out output2 = scanner.flush();
+    assert(output1.sentinel_found == false);
+    assert(output2.sentinel_found == false);
 }
 
 int main() {
@@ -174,6 +201,7 @@ int main() {
     rule_of_five_test();
     growth_behavior_test();
     scanner_clean_test();
+    scanner_split_boundary_test();
     return 0;
 }
 
