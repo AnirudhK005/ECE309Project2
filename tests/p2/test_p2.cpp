@@ -39,6 +39,10 @@ void system_message_ordering_test(){
     Message testAssistantMessage(Role::Assistant, "Another test");
     conversation.append(testAssistantMessage);
     assert(conversation.at(0).role() == Role::System);
+    assert(conversation.at(1).role() == Role::User);
+    assert(conversation.at(2).role() == Role::Assistant);
+
+
 }
 
 void copy_constructor_test(){
@@ -61,6 +65,7 @@ void copy_constructor_test(){
     assert(copyConversation.at(1).role() == Role::User);
     assert(copyConversation.at(2).role() == Role::Assistant);
     assert(copyConversation.begin() != conversation.begin());
+    assert(conversation.size() == 5);
 }
 
 void rule_of_five_test(){
@@ -80,6 +85,41 @@ void rule_of_five_test(){
     assert(movedConversation.begin() == startingPointer);
     assert(conversation.size() == 0);
     assert(conversation.begin() == nullptr);
+
+    Conversation oldConversation;
+    Message testSystemMessage3(Role::System, "Test message");
+    oldConversation.append(testSystemMessage3);
+    Message testUserMessage3(Role::User, "Hello");
+    oldConversation.append(testUserMessage3);
+    Message testAssistantMessage3(Role::Assistant, "Another test");
+    oldConversation.append(testAssistantMessage3);
+    Conversation newConversation;
+    Message placeholderMessage(Role::User, "Placeholder");
+    newConversation.append(placeholderMessage);
+    newConversation = oldConversation;
+    assert(newConversation.size() == 3);
+    assert(newConversation.at(0).role() == Role::System);
+    assert(newConversation.at(1).role() == Role::User);
+    assert(newConversation.at(2).role() == Role::Assistant);
+    Message extraMessage(Role::User, "hello");
+    newConversation.append(extraMessage);
+    assert(newConversation.size() == 4);
+    assert(oldConversation.size() == 3);
+
+    Conversation oldConversation2;
+    Message testSystemMessage4(Role::System, "Test message 4");
+    oldConversation2.append(testSystemMessage4);
+    Message testAssistantMessage4(Role::Assistant, "Another test 4");
+    oldConversation2.append(testAssistantMessage4);
+    const Message* moveSourcePointer = oldConversation2.begin();
+    Conversation newConversation2;
+    Message tempMessage(Role::User, "Hello again bye");
+    newConversation2.append(tempMessage);
+    newConversation2 = std::move(oldConversation2);
+    assert(newConversation2.begin() == moveSourcePointer);
+    assert(newConversation2.size() == 2);
+    assert(oldConversation2.size() == 0);
+    assert(oldConversation2.begin() == nullptr);
 }
 
 void growth_behavior_test(){
@@ -160,7 +200,6 @@ void scanner_clean_test(){
     SentinelScanner::Out output = scanner.feed(testString);
     SentinelScanner::Out output2 = scanner.flush();
     assert(output.sentinel_found == false);
-    assert(output.sentinel_found == false);
     assert(output2.sentinel_found == false);
     assert(output.safe_text + output2.safe_text == testString);
 }
@@ -191,6 +230,7 @@ void scanner_false_alarm_test(){
     SentinelScanner::Out output2 = scanner.flush();
     assert(output1.sentinel_found == false);
     assert(output2.sentinel_found == false);
+    assert(output1.safe_text + output2.safe_text == testString);
 }
 
 void scanner_bounded_memory_test(){
@@ -208,8 +248,6 @@ void scanner_bounded_memory_test(){
         }
     }
 }
-
-
 
 int main() {
     // TODO: write your tests here.
