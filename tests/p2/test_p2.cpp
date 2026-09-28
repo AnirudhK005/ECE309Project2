@@ -198,7 +198,7 @@ void scanner_bounded_memory_test(){
     SentinelScanner scanner(sentinel);
     const std::string testString = "<|end_conv";
     int i = 0;
-    while(i < 4){
+    while(i < (4*1024*1024)){
         for(std::size_t y = 0; y < testString.size(); y++){
             char x = testString[y];
             SentinelScanner::Out output = scanner.feed(std::string(1, x));
